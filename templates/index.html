@@ -7,6 +7,45 @@
 </head>
 <body>
     <h1>Make-A-List</h1>
-    <p>{{ message }}</p>
+
+    <form action="/" method="post">
+        <label for="recipe">Enter Recipe:</label>
+        <input type="text" name="recipe" id="recipe" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <form action="/generate_recipe" method="post">
+        <input type="hidden" name="recipe_text" value="{{ recipe }}">
+        <button type="submit" name="action" value="generate" disabled>Generate Recipe</button>
+    </form>
+
+    <form action="/save_ingredients" method="post">
+        <input type="hidden" name="recipe_text" value="{{ recipe }}">
+        <button type="submit" name="action" value="save">Save Ingredients</button>
+    </form>
+
+    {% if attempt %}
+        <h2>Current Ingredients:</h2>
+        <ul>
+            {% for item in attempt %}
+                <li>
+                    <em>{{ item.name }} </em>: {{ item.amount }} {{ item.type }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if saved_ingredients %}
+        <h2>Saved Ingredients:</h2>
+        <ul>
+            {% for key, value in saved_ingredients.items() %}
+                <li>
+                    <em>{{ key }} </em>: {{ value }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
 </body>
 </html>
