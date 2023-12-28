@@ -14,15 +14,11 @@
         <button type="submit">Submit</button>
     </form>
 
-    <form action="/generate_recipe" method="post">
-        <input type="hidden" name="recipe_text" value="{{ recipe }}">
-        <button type="submit" name="action" value="generate" disabled>Generate Recipe</button>
-    </form>
-
     <form action="/save_ingredients" method="post">
-        <input type="hidden" name="recipe_text" value="{{ recipe }}">
+        <input type="hidden" name="recipe_text" value="{{ attempt }}">
         <button type="submit" name="action" value="save">Save Ingredients</button>
     </form>
+    
 
     {% if attempt %}
         <h2>Current Ingredients:</h2>
@@ -37,7 +33,7 @@
 
     {% if saved_ingredients %}
         <h2>Saved Ingredients:</h2>
-        <ul>
+         <ul>
             {% for key, value in saved_ingredients.items() %}
                 <li>
                     <em>{{ key }} </em>: {{ value }}
@@ -45,7 +41,6 @@
             {% endfor %}
         </ul>
     {% endif %}
-</body>
-</html>
+
 </body>
 </html>

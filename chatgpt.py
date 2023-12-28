@@ -7,7 +7,7 @@ class ChatGPT():
         completion = openai.chat.completions.create(
             model = "gpt-3.5-turbo",
             messages = [
-                {"role": "system", "content": "You are a helpful assistant returning a grocery list with only up to 8 specifics ingredients based on the meal people want to make. Return each ingredient all lower case inside a python list such as [{'name': 'ingredient', 'amount':'total of the ingredient and fractions are in decimal up to the hundreth decimal place', 'type':'type of measurement'},{'name': 'ingredient', 'amount':'total of the ingredient and fractions are in decimal up to the hundreth decimal place, 'type':'type of measurement'}]. No other words besides the list because its for a program. Also no elipsis because it causes an error"},
+                {"role": "system", "content": "You are a helpful assistant returning a grocery list with only up to 7 specifics ingredients based on the meal people want to make. Return each ingredient all lower case inside a python list such as [{'name': 'ingredient', 'amount':'total of the ingredient and fractions are in decimal up to the hundreth decimal place', 'type':'type of measurement'},{'name': 'ingredient', 'amount':'total of the ingredient and fractions are in decimal up to the hundreth decimal place, 'type':'type of measurement'}]. No other words besides the list because its for a program. Also no elipsis because it causes an error. Also make sure their double quoted. Also don't return words as plural or basically with no s at the end. For all proteins, use ounces"},
                 {"role": "user", "content": user_input}
             ]
         )
