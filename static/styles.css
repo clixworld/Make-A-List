@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+}
+
+.containers {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-content: center;
+    padding: 0px;
+    gap: 20px;
+    
+}
+
+.undertop {
+    display: flex;
+    flex-wrap: wrap;
+}
+li {
+    list-style-type: none;
+}
+
+ul {
+    padding-left: 0;
+}
+
+.enter-recipe form{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.enter-recipe form input {
+    width: 300px;
+}

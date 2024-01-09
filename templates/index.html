@@ -4,43 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Make-A-List</title>
+    <link 
+        rel="stylesheet"
+        href="../static/styles.css"
+    />
 </head>
 <body>
-    <h1>Make-A-List</h1>
+    <div class="containers">
+        <div class="top-side">
+            <div class="enter-recipe">
+                <form action="/current_ingredients" method="post">
+                    <label for="recipe">Enter Recipe:</label>
+                    <input type="text" placeholder="ex: 'Chicken Curry for Two People'" name="recipe" id="recipe" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
 
-    <form action="/" method="post">
-        <label for="recipe">Enter Recipe:</label>
-        <input type="text" name="recipe" id="recipe" required>
-        <button type="submit">Submit</button>
-    </form>
+        <div class="undertop">
+            <div class="left_side">
+                <div class="current-ingredients-list">
+                    {% if attempt %}
+                        <h2>Current Ingredients:</h2>
+                        <ul>
+                            {% for item in attempt %}
+                                <li>
+                                    <em>{{ item.name }} </em>: {{ item.amount }} {{ item.type }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
 
-    <form action="/save_ingredients" method="post">
-        <input type="hidden" name="recipe_text" value="{{ attempt }}">
-        <button type="submit" name="action" value="save">Save Ingredients</button>
-    </form>
-    
+                <div class="save-ingredients-form">
+                    {% if save_option %}
+                        <form action="/save_ingredients" method="post">
+                            <input type="hidden" name="recipe_text" value="{{ attempt }}">
+                            <button type="submit" name="action" value="save">Save Ingredients</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>    
 
-    {% if attempt %}
-        <h2>Current Ingredients:</h2>
-        <ul>
-            {% for item in attempt %}
-                <li>
-                    <em>{{ item.name }} </em>: {{ item.amount }} {{ item.type }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if saved_ingredients %}
-        <h2>Saved Ingredients:</h2>
-         <ul>
-            {% for key, value in saved_ingredients.items() %}
-                <li>
-                    <em>{{ key }} </em>: {{ value }}
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
+            <div class="right_side">
+                <div class="saved-ingredients-list">
+                    {% if saved_ingredients %}
+                        <h2>Saved Ingredients:</h2>
+                        <ul>
+                            {% for key, value in saved_ingredients.items() %}
+                                <li>
+                                    <em>{{ key }} </em>: {{ value }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="send-email-form">
+                    {% if send_email_opt %}
+                        <form action="/send_email" method="post">
+                            <label for="email">Enter your email:</label>
+                            <input type="text" name="email" id="email" required>
+                            <button type="send">Send</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>    
+    </div>
 </body>
 </html>

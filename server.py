@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request
 from chatgpt import ChatGPT
 import ast
+import smtplib
+from important import EMAIL, PASSWORD
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 ai_bot = ChatGPT()
 app = Flask(__name__)
@@ -17,21 +21,25 @@ def combine_ingredients(existing, new):
             measurement_type = ingredient.get('type', 'unknown')
 
             key = f"{name}_{measurement_type}"
-            existing[key] = existing.get(key, 0) + amount
+            existing[key] = round(existing.get(key, 0) + amount, 2)
 
     return existing
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home():
     global current_ingredients, saved_ingredients
 
-    if request.method == 'POST':
-        user_input = request.form['recipe']
-        attempt_str = ai_bot.messages(user_input)
-        current_ingredients = ast.literal_eval(attempt_str)
-
     return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients)
 
+@app.route('/current_ingredients', methods=['POST'])
+def current_ingredient():
+    global saved_ingredients, current_ingredients
+
+    user_input = request.form['recipe']
+    attempt_str = ai_bot.messages(user_input)
+    current_ingredients = ast.literal_eval(attempt_str)
+
+    return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients, save_option=True)
 
 @app.route('/save_ingredients', methods=['POST'])
 def save_ingredients():
@@ -46,7 +54,34 @@ def save_ingredients():
 
     current_ingredients = []
 
-    return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients)
+    return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients, send_email_opt=True)
+
+@app.route('/send_email', methods=['POST'])
+def send_message():
+    global saved_ingredients
+
+    user_email = request.form["email"]
+    print(f"{saved_ingredients}")
+    with smtplib.SMTP("smtp.gmail.com", 587) as connection:
+        connection.starttls()
+        connection.login(EMAIL, PASSWORD)
+        
+        message = MIMEMultipart()
+        message["From"] = EMAIL
+        message["To"] = user_email
+        message["Subject"] = "Your Saved Ingredients"
+
+        body = "Your Saved ingredients:\n\n"
+        for key, value in saved_ingredients.items():
+            body += f"{key}:{value}\n"
+
+        message.attach(MIMEText(body, "plain"))
+
+        connection.sendmail(from_addr=EMAIL, to_addrs=user_email, msg=message.as_string())
+
+    return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients, send_email_opt=True)
+
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
