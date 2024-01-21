@@ -25,10 +25,9 @@ def combine_ingredients(existing, new):
 
     return existing
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['POST', 'GET'])
 def home():
     global current_ingredients, saved_ingredients
-
     return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients)
 
 @app.route('/current_ingredients', methods=['POST'])
@@ -39,7 +38,7 @@ def current_ingredient():
     attempt_str = ai_bot.messages(user_input)
     current_ingredients = ast.literal_eval(attempt_str)
 
-    return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients, save_option=True)
+    return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients, save_option=True, send_email_opt=True)
 
 @app.route('/save_ingredients', methods=['POST'])
 def save_ingredients():
@@ -61,7 +60,6 @@ def send_message():
     global saved_ingredients
 
     user_email = request.form["email"]
-    print(f"{saved_ingredients}")
     with smtplib.SMTP("smtp.gmail.com", 587) as connection:
         connection.starttls()
         connection.login(EMAIL, PASSWORD)
@@ -69,7 +67,7 @@ def send_message():
         message = MIMEMultipart()
         message["From"] = EMAIL
         message["To"] = user_email
-        message["Subject"] = "Your Saved Ingredients"
+        message["Subject"] = "Make-A-List"
 
         body = "Your Saved ingredients:\n\n"
         for key, value in saved_ingredients.items():

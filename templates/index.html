@@ -8,24 +8,28 @@
         rel="stylesheet"
         href="../static/styles.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="header">
+        <img src="../static/headerphoto_make.png"/>
+    </div>
+
     <div class="containers">
         <div class="top-side">
-            <div class="enter-recipe">
-                <form action="/current_ingredients" method="post">
-                    <label for="recipe">Enter Recipe:</label>
-                    <input type="text" placeholder="ex: 'Chicken Curry for Two People'" name="recipe" id="recipe" required>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
+            <form action="/current_ingredients" method="post">
+                <input  type="text" id="tags" placeholder="Enter Recipe" name="recipe" required>
+                <button type="submit"><img src="../static/icons8-search-24.png" style="width: 15px;height: 15px;"></button>
+            </form>
         </div>
 
         <div class="undertop">
             <div class="left_side">
                 <div class="current-ingredients-list">
                     {% if attempt %}
-                        <h2>Current Ingredients:</h2>
+                        <h2>Ingredients</h2>
                         <ul>
                             {% for item in attempt %}
                                 <li>
@@ -40,7 +44,7 @@
                     {% if save_option %}
                         <form action="/save_ingredients" method="post">
                             <input type="hidden" name="recipe_text" value="{{ attempt }}">
-                            <button type="submit" name="action" value="save">Save Ingredients</button>
+                            <button type="submit" name="action" value="save" style="--clr:#90EE90">Save Ingredients</button>
                         </form>
                     {% endif %}
                 </div>
@@ -49,7 +53,7 @@
             <div class="right_side">
                 <div class="saved-ingredients-list">
                     {% if saved_ingredients %}
-                        <h2>Saved Ingredients:</h2>
+                        <h2>Saved Ingredients</h2>
                         <ul>
                             {% for key, value in saved_ingredients.items() %}
                                 <li>
@@ -59,17 +63,20 @@
                         </ul>
                     {% endif %}
                 </div>
-                <div class="send-email-form">
-                    {% if send_email_opt %}
-                        <form action="/send_email" method="post">
-                            <label for="email">Enter your email:</label>
-                            <input type="text" name="email" id="email" required>
-                            <button type="send">Send</button>
-                        </form>
-                    {% endif %}
-                </div>
             </div>
-        </div>    
+        </div> 
+
+        <div class="bottom-side">
+            <div class="send-email-form">
+                {% if send_email_opt %}
+                    <form action="/send_email" method="post">
+                        <label for="email">Enter your email:</label>
+                        <input type="text" name="email" id="email" required>
+                        <button type="send" style="--clr:#90EE90">Send</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>   
     </div>
 </body>
 </html>
