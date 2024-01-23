@@ -2,10 +2,12 @@ from flask import Flask, render_template, request
 from chatgpt import ChatGPT
 import ast
 import smtplib
-from important import EMAIL, PASSWORD
+from dotenv import load_dotenv
+import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+load_dotenv()
 ai_bot = ChatGPT()
 app = Flask(__name__)
 
@@ -62,10 +64,10 @@ def send_message():
     user_email = request.form["email"]
     with smtplib.SMTP("smtp.gmail.com", 587) as connection:
         connection.starttls()
-        connection.login(EMAIL, PASSWORD)
+        connection.login(os.getenv("EMAIL"), os.getenv("PASSWORD"))
         
         message = MIMEMultipart()
-        message["From"] = EMAIL
+        message["From"] = os.getenv("EMAIL")
         message["To"] = user_email
         message["Subject"] = "Make-A-List"
 
@@ -75,7 +77,7 @@ def send_message():
 
         message.attach(MIMEText(body, "plain"))
 
-        connection.sendmail(from_addr=EMAIL, to_addrs=user_email, msg=message.as_string())
+        connection.sendmail(from_addr=os.getenv("EMAIL"), to_addrs=user_email, msg=message.as_string())
 
     return render_template("index.html", attempt=current_ingredients, saved_ingredients=saved_ingredients, send_email_opt=True)
 
