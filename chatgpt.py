@@ -2,11 +2,11 @@ import openai
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
 
 class ChatGPT():
+    load_dotenv()
     def messages(self, user_input):
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+        openai.api_key = os.environ.get("OPENAI_API_KEY")
         completion = openai.chat.completions.create(
             model = "gpt-3.5-turbo",
             messages = [

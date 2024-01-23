@@ -7,10 +7,12 @@ import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-load_dotenv()
+
 ai_bot = ChatGPT()
 app = Flask(__name__)
 
+load_dotenv()
+app.config["SECRET_KEY"] = os.environ.get("OPEN_API_KEY")
 saved_ingredients = {} 
 current_ingredients = [] 
 
