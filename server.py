@@ -12,7 +12,7 @@ ai_bot = ChatGPT()
 app = Flask(__name__)
 
 load_dotenv()
-app.config["SECRET_KEY"] = os.environ.get("OPEN_API_KEY")
+app.config["SECRET_KEY"] = os.environ.get("OPENAI_API_KEY")
 saved_ingredients = {} 
 current_ingredients = [] 
 
