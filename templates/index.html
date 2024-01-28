@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF- 8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Make-A-List</title>
     <link 
@@ -11,82 +11,161 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="header">
-        <img src="../static/headerphoto_make.png"/>
-    </div>
+    <div id="preloader"></div>
 
-    <div class="containers">
-        <div class="top-side">
-            <form action="/current_ingredients" method="post">
-                <input  type="text" id="tags" placeholder="Enter Recipe" name="recipe" required>
-                <button type="submit"><img src="../static/icons8-search-24.png" style="width: 15px;height: 15px;"></button>
-            </form>
-        </div>
+    <script>
+    var loader = document.getElementById("preloader");
 
-        <div class="undertop">
-            <div class="left_side">
-                <div class="current-ingredients-list">
-                    {% if attempt %}
-                        <h2>Ingredients</h2>
-                        <ul>
-                            {% for item in attempt %}
-                                <li>
-                                    <em>{{ item.name }} </em>: {{ item.amount }} {{ item.type }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
+    window.addEventListener("load", function(){
+        loader.style.display = "none";
+    })
+    </script>
 
-                <div class="save-ingredients-form">
-                    {% if save_option %}
-                        <form action="/save_ingredients" method="post">
-                            <button type="submit" name="action" value="save" style="--clr:#90EE90">Save Ingredients</button>
-                        </form>
-                    {% endif %}
-                </div>
-            </div>    
-
-            <div class="right_side">
-                <div class="saved-ingredients-list">
-                    {% if saved_ingredients %}
-                        <h2>Saved Ingredients</h2>
-                        <ul>
-                            {% for key, value in saved_ingredients.items() %}
-                                <li>
-                                    <em>{{ key.split('_')[0] }} </em>: {{ value }} {{ key.split('_')[1] }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>                
-
-                <div class="clear-button-form">
-                    {% if clear_button %}
-                        <form action="/clear_ingredients" method="post">
-                            <button type="submit" value="clear">Clear</button>
-                        </form>
-                    {% endif %}
+    <svg preserveAspectRatio="xMidYMid slice" viewBox="10 10 80 80">
+        <defs>
+            <style>
+                @keyframes rotate {
+                         0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+                .out-top {
+                    animation: rotate 20s linear infinite;
+                    transform-origin: 13px 25px;
+                }
+                .in-top {
+                    animation: rotate 10s linear infinite;
+                    transform-origin: 13px 25px;
+                }
+                .out-bottom {
+                    animation: rotate 25s linear infinite;
+                    transform-origin: 84px 93px;
+                }
+                .in-bottom {
+                    animation: rotate 15s linear infinite;
+                    transform-origin: 84px 93px;
+                }
+            </style>
+        </defs>
+        <path fill="white" class="out-top" d="M37-5C25.1-14.7,5.7-19.1-9.2-10-28.5,1.8-32.7,31.1-19.8,49c15.5,21.5,52.6,22,67.2,2.3C59.4,35,53.7,8.5,37-5Z"/>
+        <path fill="#f15bb5" class="in-top" d="M20.6,4.1C11.6,1.5-1.9,2.5-8,11.2-16.3,23.1-8.2,45.6,7.4,50S42.1,38.9,41,24.5C40.2,14.1,29.4,6.6,20.6,4.1Z"/>
+        <path fill="#00bbf9" class="out-bottom" d="M105.9,48.6c-12.4-8.2-29.3-4.8-39.4.8-23.4,12.8-37.7,51.9-19.1,74.1s63.9,15.3,76-5.6c7.6-13.3,1.8-31.1-2.3-43.8C117.6,63.3,114.7,54.3,105.9,48.6Z"/>
+        <path fill="#00f5d4" class="in-bottom" d="M102,67.1c-9.6-6.1-22-3.1-29.5,2-15.4,10.7-19.6,37.5-7.6,47.8s35.9,3.9,44.5-12.5C115.5,92.6,113.9,74.6,102,67.1Z"/>
+    </svg>
+    
+    <section class="header">
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
+              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <span class="fs-4">Make-A-List</span>
+              </a>
+        
+              <ul class="nav nav-pills">
+                <li class="nav-item"><a href="#" class="nav-link text-dark" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-dark" hidden>Support</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-dark" hidden>About</a></li>
+              </ul>
+            </header>
+          </div>
+    </section>
+    <section class="hero">
+        <div class="px-4 py-5 my-5 text-center">  
+            <div class="d-block mx-auto mb-4">
+                <h1 class="display-5 fw-bold text-body-emphasis">GROCERY LIST SIMPLIFIED</h1>
+                <div class="col-lg-6 mx-auto">
+                    <p class="lead">Whether you're planning a meal or just need a quick grocery list, Make-A-List has you covered. Simply input your recipe, and we will intelligently generate a detailed list of ingredients with precise amounts, ensuring you have everything you need. Save time, reduce waste, and make cooking a breeze with Make-A-List – your go-to companion for efficient and enjoyable meal preparation.</p>
+                    <form class="col-10 mx-auto" action="/current_ingredients" method="post">
+                        <input class="form-control form-control-lg mt-10 mw-4" type="text" placeholder="Enter Recipe" name="recipe" required>
+                    </form>
                 </div>
             </div>
-        </div> 
+        </div>
+    </section>
 
-        <div class="bottom-side">
-            <div class="send-email-form">
-                {% if send_email_opt %}
-                    <form action="/send_email" method="post">
-                        <input type="text" placeholder="Enter Email" name="email" id="email" required>
-                        <button type="send" ><img src="../static/icons8-send-25.png" style="width: 15px;height: 15px;"></button>
+    <section class="main-function">
+    <div class="undertop">
+        <div class="left_side">
+            <div class="current-ingredients-list">
+                <h2>Current Ingredients</h2>
+                {% if attempt %}
+                    <ul>
+                        {% for item in attempt %}
+                            <li>
+                                <em>{{ item.name }} </em>: {{ item.amount }} {{ item.type }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                <p><em>Empty</em></p>
+                {% endif %}
+            </div>
+
+            <div class="save-ingredients-form">
+                {% if save_option %}
+                    <form action="/save_ingredients" method="post">
+                        <button type="submit" class="btn btn-primary" name="action">Save</button>
                     </form>
                 {% endif %}
             </div>
-        </div>   
-    </div>
+        </div>    
 
-    <div class="footer">
-        <h3>Made by Cliden with ❤️</h3>
-    </div>
+        <div class="right_side">
+            <div class="saved-ingredients-list">
+                <h2>Saved Ingredients</h2>
+                {% if saved_ingredients %}
+                    <ul>
+                        {% for key, value in saved_ingredients.items() %}
+                            <li>
+                                <em>{{ key.split('_')[0] }} </em>: {{ value }} {{ key.split('_')[1] }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p><em>Empty</em></p>
+                {% endif %}
+            </div>
+            
+            <div class="row">
+                <button type="button" class="btn btn-primary col-7" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Send to Email
+                </button>
+  
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Send to Email</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/send_email" method="post">
+                                <input class="form-control" type="text" placeholder="Enter Email" name="email" id="email" required>
+                                <p><em>All email are kept secured and never disclosed</em></p>
+                                <button type="submit" class="btn btn-primary">Send</button>
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                
+                {% if clear_button %}
+                <form action="/clear_ingredients" class="col-1" method="post">
+                    <button type="submit" class="btn btn-danger" value="clear">Clear</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div> 
+    </section>
+
 </body>
 </html>

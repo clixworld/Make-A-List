@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session
+from datetime import timedelta
 from chatgpt import ChatGPT
 import ast
 import smtplib
@@ -14,7 +15,7 @@ app = Flask(__name__)
 
 load_dotenv()
 app.config["SECRET_KEY"] = os.environ.get("OPENAI_API_KEY")
-
+app.config['SESSION_COOKIE_DURATION'] = timedelta(minutes=15)
 app.config['SAVED_INGREDIENTS_LOCK'] = threading.Lock()
 app.config['CURRENT_INGREDIENTS_LOCK'] = threading.Lock()
 saved_ingredients_lock = Lock()
